@@ -6,14 +6,15 @@ import {useEffect, useState} from "react"
 import { signIn, signOut, useSession, getProviders } from "next-auth/react"
 
 const Nav = () =>{
-    const {data: session} = useSession()
+    type ProviderType = any;
+    const {data: session} = useSession() //we are using this session with communication with backend api's which we are going to define moving forward
 
-    const [providers, setProviders] = useState(null)
-    const [toggleDropdown, setToggleDropdown] = useState(false)
+    const [providers, setProviders] = useState<ProviderType | null>(null);
+    const [toggleDropdown, setToggleDropdown] = useState<boolean>(false);
 
     useEffect(()=>{
         ;(async ()=>{
-            const res:any = await getProviders() //getting available providers given by 
+            const res:any = await getProviders() //getting available providers given by next auth
             setProviders(res)
         })()
     },[]);
@@ -32,15 +33,15 @@ const Nav = () =>{
                     height={30}
                     className="object-contain"
                 />
-                <p className="logo_text">Promptopia</p>
+                <p className="logo_text">PrompMania</p>
             </Link>
-            {/* This content is only visible on screens 640px or wider. */}
+            {/* This content is only visible on screens 640px or wider.(desktop devices) */}
             <div className="sm:flex hidden">
                 {/* check first if user existor not */}
                 {session?.user ? (
                     <div className="flex gap-3 md:gap-5">
                         <Link href="/create-prompt" className="black_btn">
-                        Create Post
+                        Create Prompt
                         </Link>
 
                         <button type="button" onClick={handleSignOut} className="outline_btn">
@@ -49,7 +50,7 @@ const Nav = () =>{
 
                         <Link href="/profile">
                         <Image
-                            src={session?.user.image || '/assets/images/logo.svg'}
+                            src={session?.user?.image || '/assets/images/logo.svg'}
                             alt="profile"
                             width={37}
                             height={37}
@@ -75,12 +76,12 @@ const Nav = () =>{
                     }</>
                 )}
             </div>
-            {/* This content is visible only on small screens (less than 640px) */}
+            {/* This content is visible only on small screens (less than 640px)(mobile devices) */}
             <div className="sm:hidden flex relative">
                 {session?.user ? (
                     <div className="flex">
                         <Image
-                            src={session?.user.image || '/assets/images/logo.svg'}
+                            src={session?.user?.image || '/assets/images/logo.svg'}
                             width={37}
                             height={37}
                             className='rounded-full'
